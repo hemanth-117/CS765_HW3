@@ -23,17 +23,22 @@ class voter():
         return [news_id, self.id, vote]
     
     def get_trust(self):
+        # return trust of voter
         return self.trust
 
     def inc_trust(self):
+        # increase trust of voter
         self.trust_history.append(self.trust)
         self.trust += np.exp(-self.trust/100)
+        # trust is always between 0 and 100
         if self.trust > 100:
             self.trust = 100
         
     def dec_trust(self):
+        # decrease trust of voter
         self.trust_history.append(self.trust)
         self.trust -= np.exp(-self.trust/100)
+        # trust is always between 0 and 100
         if self.trust < 0:
             self.trust = 0
 
@@ -70,6 +75,7 @@ p = float(input("Enter fraction of voters having more probability of voting corr
 # finally N*q are 0, N*(1-q)*p are 1, and N*(1-q)*(1-p) are 2
 voters = []
 for i in range(N):
+    # create voters
     if i < N * q:
         voters.append(voter(i, 0))
     elif i < N * (1 - q) * p:
@@ -90,7 +96,7 @@ for i in range(M):
     current_news.election(voters)
     # fact check
     current_news.fact_check(voters)
-
+# calculate average trust of voters
 avaerage_history = [0 for i in range(M)]
 for i in range(N):
     for j in range(M):
@@ -98,10 +104,9 @@ for i in range(N):
 
 avaerage_history = [x / N for x in avaerage_history]
     
-
-
-# plot trust history of voters for each votes create trust_history_id.png where x is range(0, M) and Y is trust_history of voter
+# plot trust history of voters
 for i in range(N):
+    # set x-axis and y-axis labels
     s = "mallicious" if voters[i].is_honest == 0 else "honest" if voters[i].is_honest == 1 else "semi-honest"
     plt.xlabel('news_id')
     plt.ylabel('Trust')
