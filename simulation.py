@@ -139,3 +139,24 @@ plt.ylabel('Average Trust')
 plt.legend()
 plt.savefig('trust.png')
 plt.show()
+
+# plot a histogram of regions of trust
+trusts_honest = []
+trusts_semi_honest = []
+trusts_malicious = []
+for i in range(N):
+    if voters[i].is_honest == 0:
+        trusts_malicious.append(voters[i].trust)
+    elif voters[i].is_honest == 1:
+        trusts_honest.append(voters[i].trust)
+    else:
+        trusts_semi_honest.append(voters[i].trust)
+
+plt.hist(trusts_honest, bins=100, alpha=0.5, label='Honest')
+plt.hist(trusts_semi_honest, bins=100, alpha=0.5, label='Semi-Honest')
+plt.hist(trusts_malicious, bins=100, alpha=0.5, label='Malicious')
+plt.xlabel('Trust')
+plt.ylabel('Number of Voters')
+plt.legend()
+plt.savefig('trust_hist.png')
+plt.show()
