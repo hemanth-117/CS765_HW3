@@ -152,9 +152,9 @@ for i in range(N):
     else:
         trusts_semi_honest.append(voters[i].trust)
 
-plt.hist(trusts_honest, bins=100, alpha=0.5, label='Honest')
-plt.hist(trusts_semi_honest, bins=100, alpha=0.5, label='Semi-Honest')
-plt.hist(trusts_malicious, bins=100, alpha=0.5, label='Malicious')
+plt.hist(trusts_honest, bins=1, alpha = 0.5, label='Honest')
+plt.hist(trusts_semi_honest, bins=10, alpha = 0.5, label='Semi-Honest')
+plt.hist(trusts_malicious, bins=1, alpha = 0.5, label='Malicious')
 plt.xlabel('Trust')
 plt.ylabel('Number of Voters')
 plt.legend()
