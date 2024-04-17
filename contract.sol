@@ -114,6 +114,7 @@ contract Dap {
             // if news is invalid, confiscate the deposit of the voter who added the news
             confiscate += 50;
         }
+        // assuming he votes correctly for his own news
         uint voted_correctly = 0;
         for(uint i = 0; i < newsList[_newsId].votes.length; i++) {
             // update trust score of voters based on their vote
