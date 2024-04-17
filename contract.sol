@@ -35,6 +35,10 @@ contract Dap {
         uint totalVotes;
         // is news valid
         bool isNews;
+        // category of news
+        uint category;
+        // voter who added the news
+        uint voterId;
     }
     // list of voters
     mapping(uint => Voter) public voters;
@@ -54,13 +58,19 @@ contract Dap {
         voters[voterCount] = Voter(voterCount, _name, 50 , _money,true);
     }
 
-    function addNews(string memory _news) public {
+    function addNews(string memory _news, uint _category, uint _vid) public {
+        // check if voter is valid
+        require(voters[_vid].isVoter == true, "Invalid voter");
+        // check if he has enough money to add news
+        require(voters[_vid].money >= 50, "Not enough money");
         // check if news is already added
         for(uint i = 1; i <= newsCount; i++) {
             require(keccak256(abi.encodePacked(newsList[i].news)) != keccak256(abi.encodePacked(_news)), "News already exists");
         }
         newsCount++;
-        newsList[newsCount] = News(newsCount, _news, new Vote[](0), 0, true);
+        newsList[newsCount] = News(newsCount, _news, new Vote[](0), 0, true, _category, _vid);
+        // deposit 50 money as proof of adding news
+        voters[_vid].money -= 50;
     }
 
     function voteNews(uint _voterId, uint _newsId, uint _rating) public {
@@ -96,6 +106,14 @@ contract Dap {
         // check if _is_true is valid
         require(_is_true == 0 || _is_true == 1, "Invalid input");
         uint confiscate = 0;
+        // if news is valid, give the deposit back to the voter who added the news
+        if(_is_true == 1) {
+            voters[newsList[_newsId].voterId].money += 50;
+        }
+        else {
+            // if news is invalid, confiscate the deposit of the voter who added the news
+            confiscate += 50;
+        }
         uint voted_correctly = 0;
         for(uint i = 0; i < newsList[_newsId].votes.length; i++) {
             // update trust score of voters based on their vote
